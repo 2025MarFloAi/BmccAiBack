@@ -1,1 +1,1 @@
-# This repository hosts the backend of the project, powered by an Express server connected to a PostgreSQL database through Sequelize ORM. It handles authentication, data management, and communication between the frontend and database, deployed via Neon for scalable cloud hosting.
+# This repository hosts the backend of the project, powered by an Express server connected to a PostgreSQL database through Sequelize ORM. It handles authentication, data management, and communication between the frontend and database, deployed via Vecrel+Neon for quick scalable cloud hosting.
