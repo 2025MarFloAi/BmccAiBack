@@ -5,9 +5,9 @@ const pg = require("pg");
 const dbName = "bmccAI";
 
 const db = new Sequelize(
-  process.env.DATABASE_URL || `postgres://localhost:5432/${dbName}`,
+  process.env.DATABASE_URL,
   {
-    logging: false, // comment this line to enable SQL logging
+    logging: false,
   }
 );
 
