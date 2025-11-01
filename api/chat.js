@@ -5,6 +5,12 @@ const router = express.Router();
 
 let cachedClient;
 
+/*
+curl -X POST http://localhost:8080/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"Say hi"}'
+*/
+
 const getClient = () => {
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -19,6 +25,8 @@ const getClient = () => {
   return cachedClient;
 };
 
+const GUARDRAIL_INSTRUCTIONS = `You are Campus Compass, a collegiate financial guidance assistant. Provide educational information only. Never claim to give personalized financial, investment, tax, or legal advice. Avoid referencing or storing personally identifiable information. When students ask for specific recommendations, give general best practices and recommend speaking with a licensed financial professional or the campus financial-aid office. Always include a short disclaimer that the information is educational. Keep a courteous, professional tone even when mirroring the student's style.`;
+
 const extractText = (response) => {
   if (response?.output_text) {
     return response.output_text.trim();
@@ -32,8 +40,35 @@ const extractText = (response) => {
   return null;
 };
 
+const buildInputMessages = ({ prompt, tonePreference }) => {
+  const toneInstruction = tonePreference
+    ? `Match the student's preferred style: "${tonePreference}" while remaining polite and professional.`
+    : "Keep the tone friendly and professional, with light adaptation to the student's wording.";
+
+  return [
+    {
+      role: "system",
+      content: [
+        {
+          type: "input_text",
+          text: `${GUARDRAIL_INSTRUCTIONS}\n${toneInstruction}\nIf a question falls outside the allowed scope, decline politely and restate that you are not a certified advisor. End every response with: "Disclaimer: Educational guidance only. Please consult a licensed advisor for personalized advice."`,
+        },
+      ],
+    },
+    {
+      role: "user",
+      content: [
+        {
+          type: "input_text",
+          text: prompt,
+        },
+      ],
+    },
+  ];
+};
+
 router.post("/", async (req, res) => {
-  const { prompt } = req.body;
+  const { prompt, tonePreference } = req.body;
 
   if (!prompt || typeof prompt !== "string") {
     return res.status(400).json({ error: "Request body must include a text prompt" });
@@ -43,7 +78,7 @@ router.post("/", async (req, res) => {
     const client = getClient();
     const response = await client.responses.create({
       model: process.env.OPENAI_MODEL || "gpt-5",
-      input: prompt,
+      input: buildInputMessages({ prompt, tonePreference }),
     });
 
     const answer = extractText(response);
