@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const testDbRouter = require("./test-db");
+const usersRouter = require("./users");
+const chatRouter = require("./chat");
 
-router.use("/test-db", testDbRouter);
+router.use("/users", usersRouter);
+router.use("/chat", chatRouter);
 
 module.exports = router;

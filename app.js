@@ -45,8 +45,6 @@ const runApp = async () => {
       console.log(`🚀 Server is running on port ${PORT}`);
     });
 
-    initSocketServer(server);
-    console.log("🧦 Socket server initialized");
   } catch (err) {
     console.error("❌ Unable to connect to the database:", err);
   }
