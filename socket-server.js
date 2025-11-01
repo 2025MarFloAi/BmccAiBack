@@ -1,24 +1,5 @@
-const { Server } = require("socket.io");
-
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
-
-const initSocketServer = (httpServer) => {
-  const io = new Server(httpServer, {
-    cors: {
-      origin: FRONTEND_URL,
-      credentials: true,
-    },
-  });
-
-  io.on("connection", (socket) => {
-    console.log(`Socket connected: ${socket.id}`);
-
-    socket.on("disconnect", (reason) => {
-      console.log(`Socket disconnected: ${socket.id} (${reason})`);
-    });
-  });
-
-  return io;
+// Socket server removed; file retained to avoid require errors if referenced elsewhere.
+// If you see this file being imported, remove that import.
+module.exports = function removedSocketServer() {
+  throw new Error("socket-server was removed from this project");
 };
-
-module.exports = initSocketServer;

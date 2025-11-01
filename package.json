@@ -1,5 +1,5 @@
 {
-  "name": "bmccAIBackend",
+  "name": "bmccaibackend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,7 @@
     "morgan": "^1.10.0",
     "openai": "^6.7.0",
     "pg": "^8.16.2",
-    "sequelize": "^6.37.7",
-    "socket.io": "^4.8.1"
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
