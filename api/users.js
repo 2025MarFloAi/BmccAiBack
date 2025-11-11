@@ -11,7 +11,9 @@ router.get("/", async (req, res) => {
     res.status(500).json({
       error: "Failed to fetch users",
       message:
-        "Check your database connection",
+        process.env.NODE_ENV === "production"
+          ? "Check your database connection"
+          : `Check your database connection: ${error.message}`,
     });
   }
 });
